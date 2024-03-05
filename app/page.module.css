@@ -1,28 +1,38 @@
 .main {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.input {
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid black;
+    font-size: inherit;
+    outline: none;
+    padding: 0.25em;
+    margin: 2em 0 4.5em 0;
 }
 
 .table {
-	border-collapse: collapse;
-	margin-bottom: 3em;
+    border-collapse: collapse;
+    margin-bottom: 3em;
 }
 
 .tr {
-	border-bottom: 1px solid rgb(200, 200, 200);
+    border-bottom: 1px solid rgb(200, 200, 200);
 }
 
 .td {
-	padding: 0.7em 2em 0.5em 1em;
+    padding: 0.7em 2em 0.5em 1em;
 }
 
 .th {
-	padding: 0 2em 0.5em 0;
-	font-weight: bold;
+    padding: 0 2em 0.5em 0;
+    font-weight: bold;
 }
 
 .th:first-child {
-	padding-right: 5.5em;
+    padding-right: 5.5em;
 }
