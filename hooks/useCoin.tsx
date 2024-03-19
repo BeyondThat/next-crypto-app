@@ -5,7 +5,7 @@ type Currency = "usd" | "eur";
 
 const fetchCoin = (
     currency: Currency,
-    coin: string | undefined,
+    coin: string,
     numberOfDays: number,
 ): Promise<{
     prices: Array<[]>;
@@ -20,7 +20,7 @@ const fetchCoin = (
 
 export default function useCoin(
     currency: Currency,
-    coin: string | undefined,
+    coin: string,
     numberOfDays: number,
 ) {
     return useQuery({
