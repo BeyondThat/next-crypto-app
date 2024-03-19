@@ -4,7 +4,6 @@ import styles from "./page.module.css";
 import {useRouter} from "next/navigation";
 import {useState} from "react";
 import useCoins, {Coin} from "../hooks/useCoins";
-import axios from "axios";
 
 function color(priceChange: number): string {
     if (priceChange === null) {
@@ -43,7 +42,7 @@ export default function Home() {
         return (
             <tr
                 onClick={() =>
-                    router.push(`coin/${coin.name.toLowerCase().replace(" ", "-")}`)
+                    router.push(`${coin.name.toLowerCase().replace(" ", "-")}`)
                 }
                 className={styles.tr}
                 key={coin.id}
@@ -96,18 +95,20 @@ export default function Home() {
                         setSearchValue(e.target.value);
                     }}
                 />
-                <table className={styles.table}>
-                    <thead>
-                        <tr className={styles.tr}>
-                            <th className={styles.th}>Name</th>
-                            <th className={styles.th}>Price</th>
-                            <th className={styles.th}>1H</th>
-                            <th className={styles.th}>24H</th>
-                            <th className={styles.th}>7D</th>
-                        </tr>
-                    </thead>
-                    <tbody>{coins}</tbody>
-                </table>
+                <div className={styles.align}>
+                    <table className={styles.table}>
+                        <thead>
+                            <tr className={styles.tr}>
+                                <th className={styles.th}>Name</th>
+                                <th className={styles.th}>Price</th>
+                                <th className={styles.th}>1H</th>
+                                <th className={styles.th}>24H</th>
+                                <th className={styles.th}>7D</th>
+                            </tr>
+                        </thead>
+                        <tbody>{coins}</tbody>
+                    </table>
+                </div>
             </main>
         </div>
     );
