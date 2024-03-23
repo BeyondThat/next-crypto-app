@@ -24,6 +24,11 @@
     border-bottom: 1px solid rgb(200, 200, 200);
 }
 
+.tr:hover {
+    background-color: rgb(200,200,200);
+    cursor: pointer;
+}
+
 .td {
     padding: 0.7em 2em 0.5em 1em;
 }
