@@ -44,7 +44,7 @@ export default function Home() {
                 onClick={() =>
                     router.push(`${coin.name.toLowerCase().replace(" ", "-")}`)
                 }
-                className={styles.tr}
+                className={`${styles.tr} ${styles.trBody}`}
                 key={coin.id}
             >
                 <td className={styles.td}>{coin.name}</td>

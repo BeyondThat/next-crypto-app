@@ -24,8 +24,8 @@
     border-bottom: 1px solid rgb(200, 200, 200);
 }
 
-.tr:hover {
-    background-color: rgb(200,200,200);
+.trBody:hover {
+    background-color: rgb(220, 220, 220);
     cursor: pointer;
 }
 
