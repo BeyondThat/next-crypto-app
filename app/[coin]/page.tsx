@@ -8,7 +8,8 @@ const Linechart = dynamic(() => import("../components/LineChart"), {
 
 export default function CoinPage() {
     const {coin}: {coin: string} = useParams();
-    //const {data, status} = useCoin("eur", coin, 7);
+    const {data, status} = useCoin("eur", coin, 7);
+    console.log(data)
     return (
         <div>
             {coin}
