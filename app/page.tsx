@@ -20,7 +20,8 @@ function color(priceChange: number): string {
         }
     }
 }
-
+//error_code: 429, error_message: "You've exceeded the Rate Limit. 
+//Please visit https://www.coingecko.com/en/api/pricing to subscribe to our API plans for higher rate limits.
 export default function Home() {
     const [searchValue, setSearchValue] = useState("");
     const {data: coinList, status} = useCoins();

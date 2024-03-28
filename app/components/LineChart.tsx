@@ -1,16 +1,40 @@
-import {VictoryChart, VictoryLine} from "victory";
+import {VictoryChart, VictoryLine, VictoryAxis} from "victory";
 
-export default function Linechart() {
+const sharedAxisStyles = {
+    tickLabels: {fontSize: 4, padding: 5},
+    grid: {stroke: "rgb(200,200,200)"},
+};
+
+export default function Linechart({
+    coin,
+    coinData,
+}: {
+    coin: string;
+    coinData: any;
+}) {
     return (
-        <VictoryChart>
+        <VictoryChart
+            padding={{top: 40, bottom: 50, left: 100, right: 100}}
+            domainPadding={{y: 5}}
+            height={140}
+        >
+            <VictoryAxis
+                dependentAxis={true}
+                style={{
+                    ...sharedAxisStyles,
+                }}
+            />
             <VictoryLine
-                data={[
-                    {x: 1, y: 2},
-                    {x: 2, y: 3},
-                    {x: 3, y: 5},
-                    {x: 4, y: 4},
-                    {x: 5, y: 6},
-                ]}
+                data={coinData}
+                style={{
+                    data: {strokeWidth: 1, stroke: "rgb(40,140,255)"},
+                }}
+            />
+            <VictoryAxis
+                name="testAxis"
+                style={{...sharedAxisStyles}}
+                tickCount={7}
+                width={100}
             />
         </VictoryChart>
     );
