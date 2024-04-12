@@ -1,16 +1,33 @@
 import {VictoryChart, VictoryLine, VictoryAxis} from "victory";
+import {format} from "date-fns";
+import {Currency} from "../../types";
 
 const sharedAxisStyles = {
     tickLabels: {fontSize: 4, padding: 5},
     grid: {stroke: "rgb(200,200,200)"},
 };
 
+function formatDate(date: number) {
+    return format(date, "HH:mm");
+}
+
+function formatCurrency(value: number, currency: Currency) {
+    return new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: currency,
+
+        minimumFractionDigits: 2,
+    }).format(value);
+}
+
 export default function Linechart({
     coin,
     coinData,
+    currency,
 }: {
     coin: string;
     coinData: any;
+    currency: Currency;
 }) {
     return (
         <VictoryChart
@@ -22,6 +39,9 @@ export default function Linechart({
                 dependentAxis={true}
                 style={{
                     ...sharedAxisStyles,
+                }}
+                tickFormat={(tick) => {
+                    return formatCurrency(tick, currency);
                 }}
             />
             <VictoryLine
@@ -35,6 +55,7 @@ export default function Linechart({
                 style={{...sharedAxisStyles}}
                 tickCount={7}
                 width={100}
+                tickFormat={(tick: number) => formatDate(tick)}
             />
         </VictoryChart>
     );

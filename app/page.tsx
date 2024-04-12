@@ -2,8 +2,9 @@
 import Head from "next/head";
 import styles from "./page.module.css";
 import {useRouter} from "next/navigation";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import useCoins, {Coin} from "../hooks/useCoins";
+import {Currency} from "../types";
 
 function color(priceChange: number): string {
     if (priceChange === null) {
@@ -20,12 +21,19 @@ function color(priceChange: number): string {
         }
     }
 }
-//error_code: 429, error_message: "You've exceeded the Rate Limit. 
-//Please visit https://www.coingecko.com/en/api/pricing to subscribe to our API plans for higher rate limits.
+//error_code: 429, error_message: "You've exceeded the Rate Limit.
 export default function Home() {
     const [searchValue, setSearchValue] = useState("");
+    const [currency, setCurrency] = useState("");
     const {data: coinList, status} = useCoins();
     const router = useRouter();
+
+    useEffect(() => {
+        globalThis.addEventListener("storage", () => {
+            const currency = sessionStorage.getItem("currency") as Currency;
+            setCurrency(currency);
+        });
+    }, []);
 
     if (status === "pending") {
         return <p>Loading...</p>;

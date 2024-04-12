@@ -41,3 +41,10 @@
 .th:first-child {
     padding-right: 5.5em;
 }
+
+.navbar {
+    outline: 1px solid greenyellow;
+    /* background: blue; */
+    width: 100vw;
+    padding: 0.5em;
+}

@@ -2,14 +2,35 @@
 import dynamic from "next/dynamic";
 import useCoin from "../../hooks/useCoin";
 import {useParams} from "next/navigation";
+import {useEffect, useState} from "react";
+import {Currency} from "../../types";
+
 const LineChart = dynamic(() => import("../components/LineChart"), {
     ssr: false,
 });
 
 export default function CoinPage() {
     const {coin}: {coin: string} = useParams();
-    const {data, status} = useCoin("eur", coin, 7);
+    const [currency, setCurrency] = useState(
+        sessionStorage.getItem(("currency" || "usd")) as Currency,
+    );
 
+    const {data, status, refetch} = useCoin(currency, coin, 7);
+    useEffect(() => {
+        function updateCurrency() {
+            const currency = sessionStorage.getItem("currency") as Currency;
+            setCurrency(currency);
+        }
+        globalThis.addEventListener("storage", updateCurrency);
+
+//        return () => {
+  //          globalThis.removeEventListener("storage", updateCurrency);
+   //     };
+    }, []);
+
+    console.log(currency);
+
+    //  const status = null;
     if (status === "pending") {
         return <p>Loading...</p>;
     }
@@ -24,11 +45,15 @@ export default function CoinPage() {
             y: item[1], //price
         };
     });
-    console.log(data);
     return (
         <div>
-            {coin}
-            <LineChart coinData={formattedData} coin={coin} />
+            {
+                <LineChart
+                    coinData={formattedData}
+                    coin={coin}
+                    currency={currency}
+                />
+            }
         </div>
     );
 }

@@ -1,7 +1,6 @@
 import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
-
-type Currency = "usd" | "eur";
+import {Currency} from "../types";
 
 const fetchCoin = (
     currency: Currency,
@@ -24,7 +23,7 @@ export default function useCoin(
     numberOfDays: number,
 ) {
     return useQuery({
-        queryKey: ["coin"],
+        queryKey: [currency],
         queryFn: () => fetchCoin(currency, coin, numberOfDays),
     });
 }
