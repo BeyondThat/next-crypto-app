@@ -3,7 +3,7 @@ import Head from "next/head";
 import styles from "./page.module.css";
 import {useRouter} from "next/navigation";
 import {useState, useEffect} from "react";
-import useCoins, {Coin} from "../hooks/useCoins";
+import useFetchCoins, {Coin} from "../hooks/useFetchCoins";
 import {Currency} from "../types";
 
 function color(priceChange: number): string {
@@ -24,8 +24,9 @@ function color(priceChange: number): string {
 //error_code: 429, error_message: "You've exceeded the Rate Limit.
 export default function Home() {
     const [searchValue, setSearchValue] = useState("");
-    const [currency, setCurrency] = useState("");
-    const {data: coinList, status} = useCoins();
+    const [currency, setCurrency] = useState("usd");
+    const [eurRate, setEurRate] = useState<number>(1.1);
+    const {data: coinList, status: coinsStatus} = useFetchCoins();
     const router = useRouter();
 
     useEffect(() => {
@@ -33,20 +34,37 @@ export default function Home() {
             const currency = sessionStorage.getItem("currency") as Currency;
             setCurrency(currency);
         });
+
+        async function fetchEur() {
+            try {
+                const res = await fetch(
+                    "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A?format=csvdata&startPeriod=2024-04-10",
+                );
+
+                const dateAndPrice = /202[4-9].+?,.+?,/g;
+                const text = await res.text();
+                const result = text.match(dateAndPrice);
+                const data = result![result!.length - 1].split(",");
+                setEurRate(Number(data[1]));
+            } catch {
+                setEurRate(1.1);
+            }
+        }
+
+        fetchEur();
     }, []);
 
-    if (status === "pending") {
+    if (coinsStatus === "pending") {
         return <p>Loading...</p>;
     }
 
-    if (status === "error") {
+    if (coinsStatus === "error") {
         return <p>Error!</p>;
     }
 
     const filteredCoins: Array<Coin> = coinList?.data.filter((coin: Coin) =>
         coin.name.toLowerCase().includes(searchValue.toLowerCase()),
     );
-
     const coins = filteredCoins.map((coin: Coin) => {
         return (
             <tr
@@ -57,7 +75,11 @@ export default function Home() {
                 key={coin.id}
             >
                 <td className={styles.td}>{coin.name}</td>
-                <td className={styles.td}>${coin.price_usd}</td>
+                <td className={styles.td}>
+                    {currency === "usd"
+                        ? `$${parseFloat(coin.price_usd).toFixed(2)}`
+                        : `€${(parseFloat(coin.price_usd) / eurRate).toFixed(2)}`}
+                </td>
 
                 <td
                     className={styles.td}

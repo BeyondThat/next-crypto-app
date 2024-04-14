@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import useCoin from "../../hooks/useCoin";
+import useFetchCoin from "../../hooks/useFetchCoin";
 import {useParams} from "next/navigation";
 import {useEffect, useState} from "react";
 import {Currency} from "../../types";
@@ -15,7 +15,7 @@ export default function CoinPage() {
         sessionStorage.getItem(("currency" || "usd")) as Currency,
     );
 
-    const {data, status, refetch} = useCoin(currency, coin, 7);
+    const {data, status, refetch} = useFetchCoin(currency, coin, 7);
     useEffect(() => {
         function updateCurrency() {
             const currency = sessionStorage.getItem("currency") as Currency;

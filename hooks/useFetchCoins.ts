@@ -16,9 +16,9 @@ interface ListOfCoins {
 	data: Array<Coin>;
 }
 
-export default function useCoins() {
-	return useQuery({ queryKey: ["coins"], queryFn: () => fetchCoins(), staleTime: 60000, refetchOnWindowFocus: false });
+export default function useFetchCoins() {
+	return useQuery({ queryKey: ["coins"], queryFn: () => _fetchCoins(), staleTime: 60000, refetchOnWindowFocus: false });
 }
 
-const fetchCoins = (): Promise<ListOfCoins> =>
+const _fetchCoins = (): Promise<ListOfCoins> =>
 	axios.get(`https://api.coinlore.net/api/tickers/?start=0&limit=25`).then((response) => response.data);
