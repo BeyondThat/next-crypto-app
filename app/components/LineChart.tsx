@@ -26,6 +26,10 @@ function formatCurrency(value: number, currency: Currency) {
     }).format(value);
 }
 
+function formatLabelDate(date: number) {
+    return format(date, "ccc kk:mm");
+}
+
 export default function Linechart({
     coin,
     coinData,
@@ -43,7 +47,9 @@ export default function Linechart({
             containerComponent={
                 <VictoryVoronoiContainer
                     title={coin}
-                    labels={(point: any) => `${formatCurrency(point.datum.y, currency)}`}
+                    labels={(point: any) =>
+                        `${formatLabelDate(point.datum.x)}\n${formatCurrency(point.datum.y, currency)}`
+                    }
                     radius={50}
                     voronoiDimension={"x"}
                     labelComponent={<ChartCursor />}
