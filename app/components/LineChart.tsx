@@ -1,6 +1,12 @@
-import {VictoryChart, VictoryLine, VictoryAxis} from "victory";
+import {
+    VictoryChart,
+    VictoryLine,
+    VictoryAxis,
+    VictoryVoronoiContainer,
+} from "victory";
 import {format} from "date-fns";
 import {Currency} from "../../types";
+import ChartCursor from "./ChartCursor";
 
 const sharedAxisStyles = {
     tickLabels: {fontSize: 4, padding: 5},
@@ -34,6 +40,15 @@ export default function Linechart({
             padding={{top: 40, bottom: 50, left: 100, right: 100}}
             domainPadding={{y: 5}}
             height={140}
+            containerComponent={
+                <VictoryVoronoiContainer
+                    title={coin}
+                    labels={(point: any) => `${formatCurrency(point.datum.y, currency)}`}
+                    radius={50}
+                    voronoiDimension={"x"}
+                    labelComponent={<ChartCursor />}
+                />
+            }
         >
             <VictoryAxis
                 dependentAxis={true}
