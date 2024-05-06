@@ -9,9 +9,18 @@
     font: inherit;
 }
 
+:root {
+    --purple: #5267fe;
+}
+
 body {
     min-height: 100vh;
     max-width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background: #e6e9f2;
+    min-height: 100vh;
 }
 
 nav {
@@ -19,8 +28,8 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgb(0, 135, 255);
-    height: 50px;
+    background: #ffffff;
+    height: 70px;
     padding: 0 4em;
 }
 
@@ -31,14 +40,52 @@ select {
     background-color: white;
 }
 
-nav > a {
+a {
     text-decoration: none;
-    color: white;
+    color: #4a4f5f;
     max-height: 100%;
-    padding: 0.5em 0.7em;
+    padding: 23px 0;
 }
 
-nav > a:hover {
+nav>ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1em 0;
+    height: 100%;
+}
+
+li {
+    padding-left: 2em;
+}
+
+nav>a:hover {
     background: rgb(70, 170, 255);
     border-radius: 0.25rem;
+}
+
+li>a:hover {
+    color: var(--purple);
+
+    border-bottom: 3px solid var(--purple);
+}
+
+.active {
+    color: var(--purple);
+
+    border-bottom: 3px solid var(--purple);
+}
+
+.card {
+    background: #ffffff;
+    padding: 1em 2em;
+    border-radius: 7px;
+}
+
+.columns {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

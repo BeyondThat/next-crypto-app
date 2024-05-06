@@ -26,3 +26,15 @@ export interface PriceDifference {
 }
 
 export type Currency = "usd" | "eur";
+
+export type DataType = "coins" | "exchanges";
+
+export interface Exchange {
+    id: string;
+    name: string;
+    volume_usd: number;
+    active_pairs: number;
+    url: string;
+    time: string;
+}
+
