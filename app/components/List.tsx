@@ -50,12 +50,14 @@ export default function List({
     );
 
     const [searchValue, setSearchValue] = useState("");
+    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
     const router = useRouter();
 
     function sortData(sortBy: keyof Exchange) {
         //const sortedCoinsData: Array<Coin> = listData?.data.sort((a: number, b: number) => a - b);
         //const sortedExchangesData = (Object.values(data) as Array<Exchange>);
+
         let sortedExchangesData = (Object.values(data) as Array<Exchange>);
         if (typeof (sortedExchangesData[0][sortBy]) === "string") {
             sortedExchangesData = sortedExchangesData.sort((a, b) => (a[sortBy] as string).localeCompare(b[sortBy] as string));
@@ -66,8 +68,16 @@ export default function List({
             sortedExchangesData = sortedExchangesData.sort((a, b) => (a[sortBy] as number) - (b[sortBy] as number));
         }
 
+        if (sortOrder === "asc") {
+            setSortOrder("desc");
+            setData(sortedExchangesData.reverse())
+        }
+        else {
+            setSortOrder("asc");
+            setData(sortedExchangesData);
+        }
         //console.log(sortedExchangesData[2]);
-        setData(sortedExchangesData);
+        //setData(sortedExchangesData);
     }
 
     useEffect(() => {
