@@ -86,6 +86,8 @@ li>a:hover {
 .columns {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    margin-top: 5em;
+    min-width: 40em;
+    min-height: 10em;
 }

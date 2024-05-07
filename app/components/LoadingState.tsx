@@ -1,4 +1,4 @@
-import {Watch} from "react-loader-spinner";
+import { Watch } from "react-loader-spinner";
 
 export default function LoadingState() {
     return (
@@ -9,7 +9,9 @@ export default function LoadingState() {
             radius="48"
             color="#5267fe"
             ariaLabel="watch-loading"
-            wrapperStyle={{}}
+            wrapperStyle={{
+                "paddingTop": "10em",
+            }}
             wrapperClass=""
         />
     );

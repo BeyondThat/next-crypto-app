@@ -1,10 +1,10 @@
 "use client";
-import {useState, useEffect} from "react";
-import {Currency, Coin, DataType, Exchange} from "../../types";
-import styles from "../page.module.css";
+import { useState, useEffect } from "react";
+import { Currency, Coin, DataType, Exchange } from "../../types";
 import "../globals.css";
-import {useRouter} from "next/navigation";
-import {format} from "date-fns";
+import styles from "../page.module.css";
+import { useRouter } from "next/navigation";
+import { format } from "date-fns";
 
 function color(priceChange: number): string {
     if (priceChange === null) {
@@ -22,12 +22,14 @@ function color(priceChange: number): string {
     }
 }
 
+
+
 function formatCurrency(value: number) {
     let a = new Intl.NumberFormat("en-IN", {
         maximumSignificantDigits: 7,
     }).format(value);
     let b = value.toLocaleString("de-DE");
-    console.log(b);
+    //console.log(b);
     return b;
 }
 
@@ -38,7 +40,10 @@ export default function List({
     listData: any;
     dataType: DataType;
 }) {
+    const [data, setData] = useState(listData);
     const [eurRate, setEurRate] = useState<number>();
+
+    //console.log(data);
 
     const [currency, setCurrency] = useState(
         sessionStorage.getItem("currency") || "usd",
@@ -47,6 +52,23 @@ export default function List({
     const [searchValue, setSearchValue] = useState("");
 
     const router = useRouter();
+
+    function sortData(sortBy: keyof Exchange) {
+        //const sortedCoinsData: Array<Coin> = listData?.data.sort((a: number, b: number) => a - b);
+        //const sortedExchangesData = (Object.values(data) as Array<Exchange>);
+        let sortedExchangesData = (Object.values(data) as Array<Exchange>);
+        if (typeof (sortedExchangesData[0][sortBy]) === "string") {
+            sortedExchangesData = sortedExchangesData.sort((a, b) => (a[sortBy] as string).localeCompare(b[sortBy] as string));
+            console.log(5);
+        }
+        //if (!isNaN(Number(sortedExchangesData[0][sortBy]))) {
+        else {
+            sortedExchangesData = sortedExchangesData.sort((a, b) => (a[sortBy] as number) - (b[sortBy] as number));
+        }
+
+        //console.log(sortedExchangesData[2]);
+        setData(sortedExchangesData);
+    }
 
     useEffect(() => {
         globalThis.addEventListener("storage", () => {
@@ -73,7 +95,7 @@ export default function List({
         fetchEur();
     }, []);
 
-    let data;
+    let list;
     let tableHead;
 
     if (dataType === "coins") {
@@ -82,7 +104,7 @@ export default function List({
                 value.name.toLowerCase().includes(searchValue.toLowerCase()),
         );
 
-        data = filteredCoinsData.map((coin: Coin) => {
+        list = filteredCoinsData.map((coin: Coin) => {
             return (
                 <tr
                     onClick={() =>
@@ -100,7 +122,7 @@ export default function List({
 
                     <td
                         className={styles.td}
-                        style={{color: color(parseFloat(coin.percent_change_1h))}}
+                        style={{ color: color(parseFloat(coin.percent_change_1h)) }}
                     >
                         {coin.percent_change_1h
                             ? `${parseFloat(coin.percent_change_1h).toFixed(1)}%`
@@ -108,7 +130,7 @@ export default function List({
                     </td>
                     <td
                         className={styles.td}
-                        style={{color: color(parseFloat(coin.percent_change_24h))}}
+                        style={{ color: color(parseFloat(coin.percent_change_24h)) }}
                     >
                         {coin.percent_change_24h
                             ? `${parseFloat(coin.percent_change_24h).toFixed(1)}%`
@@ -117,7 +139,7 @@ export default function List({
 
                     <td
                         className={styles.td}
-                        style={{color: color(parseFloat(coin.percent_change_7d))}}
+                        style={{ color: color(parseFloat(coin.percent_change_7d)) }}
                     >
                         {coin.percent_change_7d
                             ? `${parseFloat(coin.percent_change_7d).toFixed(1)}%`
@@ -137,22 +159,21 @@ export default function List({
             </>
         );
     } else {
-        //const filteredExchangesData = Object.values(listData).filter((value: Exchange) => value.name.toLowerCase().includes(searchValue.toLowerCase()),);
         const filteredExchangesData = (
-            Object.values(listData) as Array<Exchange>
+            Object.values(data) as Array<Exchange>
         ).filter(
             (exchange: Exchange) =>
                 exchange.name.toLowerCase().includes(searchValue.toLowerCase()) &&
                 exchange.volume_usd !== 0,
         );
 
-        data = filteredExchangesData.map((exchange: Exchange) => {
+        list = filteredExchangesData.map((exchange: Exchange) => {
             return (
                 <tr
                     onClick={() =>
                         router.push(`${exchange.name.toLowerCase().replace(" ", "-")}`)
                     }
-                    className={`${styles.tr} ${styles.trbody}`}
+                    className={`${styles.tr} ${styles.trBody}`}
                     key={exchange.id}
                 >
                     <td className={styles.td}>{exchange.name}</td>
@@ -168,9 +189,9 @@ export default function List({
 
         tableHead = (
             <>
-                <th className={styles.th}>Name</th>
-                <th className={styles.th}>Total Volume</th>
-                <th className={styles.th}>Markets</th>
+                <th className={styles.th} onClick={() => sortData("name")}>Name</th>
+                <th className={styles.th} onClick={() => sortData("volume_usd")}>Total Volume</th>
+                <th className={styles.th} onClick={() => sortData("active_pairs")}>Markets</th>
             </>
         );
     }
@@ -189,7 +210,7 @@ export default function List({
                 <thead>
                     <tr className={styles.tr}>{tableHead}</tr>
                 </thead>
-                <tbody>{data}</tbody>
+                <tbody>{list}</tbody>
             </table>
         </div>
     );
