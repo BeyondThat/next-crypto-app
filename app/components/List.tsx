@@ -6,12 +6,6 @@ import styles from "../page.module.css";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 
-interface SortOptions {
-    sortTarget: HTMLElement | null,
-    sortOrder: "asc" | "desc"
-
-}
-
 function color(priceChange: number): string {
     if (priceChange === null) {
         return "undefined";
@@ -28,8 +22,6 @@ function color(priceChange: number): string {
     }
 }
 
-
-
 function formatCurrency(value: number) {
     let a = new Intl.NumberFormat("en-IN", {
         maximumSignificantDigits: 7,
@@ -39,19 +31,6 @@ function formatCurrency(value: number) {
     return b;
 }
 
-function sortIndicator(sortOptions: SortOptions, element: string) {
-
-
-    if (sortOptions.sortTarget?.innerText === element && sortOptions.sortOrder === "asc") {
-        console.log(5);
-
-        return "test"
-    }
-    else {
-        console.log(sortOptions, 5);
-        return ""
-    }
-}
 
 export default function List({
     listData,
@@ -74,11 +53,7 @@ export default function List({
 
     const router = useRouter();
 
-
     function sortData(newSortTarget: HTMLElement, sortBy: keyof Exchange) {
-
-
-
 
         let sortedExchangesData = (Object.values(data) as Array<Exchange>);
         if (typeof (sortedExchangesData[0][sortBy]) === "string") {
@@ -114,10 +89,18 @@ export default function List({
             sortTarget.current = newSortTarget;
             setData(sortedExchangesData.reverse());
         }
+    }
 
+    function onMouseOverHeader(newSortTarget: HTMLElement) {
+        if (!newSortTarget.classList.contains(styles.desc) && !newSortTarget.classList.contains(styles.asc)) {
+            newSortTarget.classList.add(styles.descTransparent);
+        }
+    }
 
-
-
+    function onMouseOutHeader(newSortTarget: HTMLElement) {
+        if (newSortTarget.classList.contains(styles.descTransparent)) {
+            newSortTarget.classList.remove(styles.descTransparent);
+        }
     }
 
     useEffect(() => {
@@ -239,9 +222,9 @@ export default function List({
 
         tableHead = (
             <>
-                <th className={styles.th} onClick={(e) => sortData(e.target as HTMLElement, "name")}>Name</th>
-                <th className={styles.th} onClick={(e) => sortData(e.target as HTMLElement, "volume_usd")}>Total Volume</th>
-                <th className={styles.th} onClick={(e) => sortData(e.target as HTMLElement, "active_pairs")}>Markets</th>
+                <th className={styles.th} onMouseOver={(e) => onMouseOverHeader(e.target as HTMLElement)} onMouseLeave={(e) => onMouseOutHeader(e.target as HTMLElement)} onClick={(e) => sortData(e.target as HTMLElement, "name")}>Name</th>
+                <th className={styles.th} onMouseOver={(e) => onMouseOverHeader(e.target as HTMLElement)} onMouseLeave={(e) => onMouseOutHeader(e.target as HTMLElement)} onClick={(e) => sortData(e.target as HTMLElement, "volume_usd")}>Total Volume</th>
+                <th className={styles.th} onMouseOver={(e) => onMouseOverHeader(e.target as HTMLElement)} onMouseLeave={(e) => onMouseOutHeader(e.target as HTMLElement)} onClick={(e) => sortData(e.target as HTMLElement, "active_pairs")}>Markets</th>
             </>
         );
     }

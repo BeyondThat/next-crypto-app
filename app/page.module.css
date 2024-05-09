@@ -36,6 +36,9 @@
     text-align: left;
     border-collapse: collapse;
     cursor: pointer;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .th:first-child {
@@ -52,4 +55,9 @@
 
 .desc::after {
     content: "▾";
+}
+
+.descTransparent::after {
+    content: "▾";
+    opacity: 0.5;
 }
