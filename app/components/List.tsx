@@ -1,10 +1,16 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Currency, Coin, DataType, Exchange } from "../../types";
 import "../globals.css";
 import styles from "../page.module.css";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
+
+interface SortOptions {
+    sortTarget: HTMLElement | null,
+    sortOrder: "asc" | "desc"
+
+}
 
 function color(priceChange: number): string {
     if (priceChange === null) {
@@ -33,6 +39,20 @@ function formatCurrency(value: number) {
     return b;
 }
 
+function sortIndicator(sortOptions: SortOptions, element: string) {
+
+
+    if (sortOptions.sortTarget?.innerText === element && sortOptions.sortOrder === "asc") {
+        console.log(5);
+
+        return "test"
+    }
+    else {
+        console.log(sortOptions, 5);
+        return ""
+    }
+}
+
 export default function List({
     listData,
     dataType,
@@ -50,34 +70,54 @@ export default function List({
     );
 
     const [searchValue, setSearchValue] = useState("");
-    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+    let sortTarget = useRef<null | HTMLElement>(null);
 
     const router = useRouter();
 
-    function sortData(sortBy: keyof Exchange) {
-        //const sortedCoinsData: Array<Coin> = listData?.data.sort((a: number, b: number) => a - b);
-        //const sortedExchangesData = (Object.values(data) as Array<Exchange>);
+
+    function sortData(newSortTarget: HTMLElement, sortBy: keyof Exchange) {
+
+
+
 
         let sortedExchangesData = (Object.values(data) as Array<Exchange>);
         if (typeof (sortedExchangesData[0][sortBy]) === "string") {
             sortedExchangesData = sortedExchangesData.sort((a, b) => (a[sortBy] as string).localeCompare(b[sortBy] as string));
-            console.log(5);
         }
-        //if (!isNaN(Number(sortedExchangesData[0][sortBy]))) {
         else {
             sortedExchangesData = sortedExchangesData.sort((a, b) => (a[sortBy] as number) - (b[sortBy] as number));
         }
 
-        if (sortOrder === "asc") {
-            setSortOrder("desc");
-            setData(sortedExchangesData.reverse())
+        if (sortTarget.current === null) {
+            newSortTarget.classList.add(styles.desc);
+            sortTarget.current = newSortTarget;
+            setData(sortedExchangesData.reverse());
+        }
+        else if (sortTarget.current === newSortTarget) {
+            if (newSortTarget.classList.contains(styles.desc)) {
+                newSortTarget.classList.replace(styles.desc, styles.asc);
+                setData(sortedExchangesData);
+            }
+            else {
+                newSortTarget.classList.replace(styles.asc, styles.desc);
+                setData(sortedExchangesData.reverse());
+            }
         }
         else {
-            setSortOrder("asc");
-            setData(sortedExchangesData);
+            if (sortTarget.current.classList.contains(styles.desc)) {
+                sortTarget.current.classList.remove(styles.desc);
+            }
+            else {
+                sortTarget.current.classList.remove(styles.asc);
+            }
+            newSortTarget.classList.add(styles.desc);
+            sortTarget.current = newSortTarget;
+            setData(sortedExchangesData.reverse());
         }
-        //console.log(sortedExchangesData[2]);
-        //setData(sortedExchangesData);
+
+
+
+
     }
 
     useEffect(() => {
@@ -199,9 +239,9 @@ export default function List({
 
         tableHead = (
             <>
-                <th className={styles.th} onClick={() => sortData("name")}>Name</th>
-                <th className={styles.th} onClick={() => sortData("volume_usd")}>Total Volume</th>
-                <th className={styles.th} onClick={() => sortData("active_pairs")}>Markets</th>
+                <th className={styles.th} onClick={(e) => sortData(e.target as HTMLElement, "name")}>Name</th>
+                <th className={styles.th} onClick={(e) => sortData(e.target as HTMLElement, "volume_usd")}>Total Volume</th>
+                <th className={styles.th} onClick={(e) => sortData(e.target as HTMLElement, "active_pairs")}>Markets</th>
             </>
         );
     }

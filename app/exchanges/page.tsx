@@ -29,7 +29,7 @@ export default function ExchangesPage() {
             "id": "5",
             "name": "Binance",
             "name_id": "binance",
-            "volume_usd": 10,
+            "volume_usd": 100,
             "active_pairs": 1,
             "url": "https://www.binance.com",
             "country": "Japan"
@@ -38,7 +38,7 @@ export default function ExchangesPage() {
             "id": "9",
             "name": "Bitfinex",
             "name_id": "bitfinex2",
-            "volume_usd": 1,
+            "volume_usd": 10,
             "active_pairs": 2,
             "url": "https://www.bitfinex.com",
             "country": "Hong Kong"
@@ -56,7 +56,7 @@ export default function ExchangesPage() {
             "id": "11",
             "name": "Bithumb",
             "name_id": "bithumb",
-            "volume_usd": 12949547.242605284,
+            "volume_usd": 1,
             "active_pairs": 76,
             "url": "https://www.bithumb.com",
             "country": "South Korea"

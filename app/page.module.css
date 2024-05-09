@@ -34,8 +34,22 @@
 .th {
     padding: 0 2em 0.5em 0;
     text-align: left;
+    border-collapse: collapse;
+    cursor: pointer;
 }
 
 .th:first-child {
     padding-right: 5.5em;
+}
+
+.asc .desc {
+    position: relative;
+}
+
+.asc::after {
+    content: "▴";
+}
+
+.desc::after {
+    content: "▾";
 }
