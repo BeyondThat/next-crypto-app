@@ -25,7 +25,20 @@ export default function useFetchCoins() {
     });
 }
 
-const _fetchCoins = (): Promise<ListOfCoins> =>
-    axios
-        .get(`https://api.coinlore.net/api/tickers/?start=0&limit=25`)
-        .then((response) => response.data);
+const _fetchCoins = async (): Promise<ListOfCoins> => {
+    const path = `coinlore_exchanges1.json`;
+    const url = "https://api.coinlore.net/api/tickers/?start=0&limit=25";
+    return axios
+        .get(url)
+                .then((response) => {
+            if (response.status !== 200) {
+                console.error("API error. Loading static data.");
+                return import(`../public/${path}`, {
+                    assert: { type: "json" }
+                }).then(data => data.default)
+
+            }
+            else {
+                return response.data
+            }
+        })}
