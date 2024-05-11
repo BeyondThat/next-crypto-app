@@ -58,6 +58,8 @@ export default function List({
             sortedExchangesData = sortedExchangesData.sort((a, b) => ((a[sortBy] as string).toLowerCase()).localeCompare((b[sortBy] as string).toLowerCase()));
         }
         else {
+
+            console.log(sortBy);
             sortedExchangesData = sortedExchangesData.sort((a, b) => (a[sortBy] as number) - (b[sortBy] as number));
         }
 
@@ -184,9 +186,9 @@ export default function List({
             <>
                 <th className={styles.th} onMouseOver={(e) => onMouseOverHeader(e.target as HTMLElement)} onMouseLeave={(e) => onMouseOutHeader(e.target as HTMLElement)} onClick={(e) => sortData(e.target as HTMLElement, "name")}>Name</th>
                 <th className={styles.th} onMouseOver={(e) => onMouseOverHeader(e.target as HTMLElement)} onMouseLeave={(e) => onMouseOutHeader(e.target as HTMLElement)} onClick={(e) => sortData(e.target as HTMLElement, "price_usd")}>Price</th>
-                <th className={styles.th} onMouseOver={(e) => onMouseOverHeader(e.target as HTMLElement)} onMouseLeave={(e) => onMouseOutHeader(e.target as HTMLElement)} onClick={(e) => sortData(e.target as HTMLElement, "price_usd")}>1H</th>
-                <th className={styles.th} onMouseOver={(e) => onMouseOverHeader(e.target as HTMLElement)} onMouseLeave={(e) => onMouseOutHeader(e.target as HTMLElement)} onClick={(e) => sortData(e.target as HTMLElement, "price_usd")}>24H</th>
-                <th className={styles.th} onMouseOver={(e) => onMouseOverHeader(e.target as HTMLElement)} onMouseLeave={(e) => onMouseOutHeader(e.target as HTMLElement)} onClick={(e) => sortData(e.target as HTMLElement, "price_usd")}>7D</th>
+                <th className={styles.th} onMouseOver={(e) => onMouseOverHeader(e.target as HTMLElement)} onMouseLeave={(e) => onMouseOutHeader(e.target as HTMLElement)} onClick={(e) => sortData(e.target as HTMLElement, "percent_change_1h")}>1H</th>
+                <th className={styles.th} onMouseOver={(e) => onMouseOverHeader(e.target as HTMLElement)} onMouseLeave={(e) => onMouseOutHeader(e.target as HTMLElement)} onClick={(e) => sortData(e.target as HTMLElement, "percent_change_24h")}>24H</th>
+                <th className={styles.th} onMouseOver={(e) => onMouseOverHeader(e.target as HTMLElement)} onMouseLeave={(e) => onMouseOutHeader(e.target as HTMLElement)} onClick={(e) => sortData(e.target as HTMLElement, "percent_change_7d")}>7D</th>
             </>
         );
     } else {
