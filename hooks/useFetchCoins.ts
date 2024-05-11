@@ -26,7 +26,7 @@ export default function useFetchCoins() {
 }
 
 const _fetchCoins = async (): Promise<ListOfCoins> => {
-    const path = `coinlore_exchanges1.json`;
+    const path = `coinlore_coins.json`;
     const url = "https://api.coinlore.net/api/tickers/?start=0&limit=25";
     return axios
         .get(url)

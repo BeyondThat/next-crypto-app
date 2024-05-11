@@ -36,7 +36,7 @@ export default function List({
     listData,
     dataType,
 }: {
-    listData: Array<any>;
+    listData: any;
     dataType: DataType;
 }) {
     const [data, setData] = useState(listData);
