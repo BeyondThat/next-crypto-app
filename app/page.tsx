@@ -27,7 +27,7 @@ export default function Home() {
             </Head>
 
             <main>
-                 <CoinList listData={coinListData} dataType="coins"/> 
+                 <CoinList listData={coinListData.data} dataType="coins"/> 
             </main>
         </div>
     );

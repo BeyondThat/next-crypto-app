@@ -5,6 +5,7 @@ export interface ListOfCoins {
 export type FilteredCoins = Array<Coin>;
 
 export interface Coin {
+    [key:string]:any;
     id: string;
     name: string;
     market_cap_usd: string;
@@ -30,6 +31,7 @@ export type Currency = "usd" | "eur";
 export type DataType = "coins" | "exchanges";
 
 export interface Exchange {
+    [key: string]:any;
     id: string;
     name: string;
     volume_usd: number;

@@ -36,13 +36,11 @@ export default function List({
     listData,
     dataType,
 }: {
-    listData: any;
+    listData: Array<any>;
     dataType: DataType;
 }) {
     const [data, setData] = useState(listData);
     const [eurRate, setEurRate] = useState<number>();
-
-    //console.log(data);
 
     const [currency, setCurrency] = useState(
         sessionStorage.getItem("currency") || "usd",
@@ -53,18 +51,18 @@ export default function List({
 
     const router = useRouter();
 
-    function sortData(newSortTarget: HTMLElement, sortBy: keyof Exchange) {
+    function sortData(newSortTarget: HTMLElement, sortBy: keyof Exchange | keyof Coin) {
+        let sortedExchangesData = (Object.values(data)) as Array<Exchange | Coin>;
 
-        let sortedExchangesData = (Object.values(data) as Array<Exchange>);
-        if (typeof (sortedExchangesData[0][sortBy]) === "string") {
-            sortedExchangesData = sortedExchangesData.sort((a, b) => (a[sortBy] as string).localeCompare(b[sortBy] as string));
+        if (isNaN(sortedExchangesData[0][sortBy])) {
+            sortedExchangesData = sortedExchangesData.sort((a, b) => ((a[sortBy] as string).toLowerCase()).localeCompare((b[sortBy] as string).toLowerCase()));
         }
         else {
             sortedExchangesData = sortedExchangesData.sort((a, b) => (a[sortBy] as number) - (b[sortBy] as number));
         }
 
         if (sortTarget.current === null) {
-            newSortTarget.classList.add(styles.desc);
+            newSortTarget.classList.replace(styles.descTransparent, styles.desc);
             sortTarget.current = newSortTarget;
             setData(sortedExchangesData.reverse());
         }
@@ -85,7 +83,7 @@ export default function List({
             else {
                 sortTarget.current.classList.remove(styles.asc);
             }
-            newSortTarget.classList.add(styles.desc);
+            newSortTarget.classList.replace(styles.descTransparent, styles.desc);
             sortTarget.current = newSortTarget;
             setData(sortedExchangesData.reverse());
         }
@@ -132,8 +130,8 @@ export default function List({
     let tableHead;
 
     if (dataType === "coins") {
-        const filteredCoinsData: Array<Coin> = listData?.data.filter(
-            (value: Coin) =>
+        const filteredCoinsData:Array<Coin> = data.filter(
+            (value:Coin) =>
                 value.name.toLowerCase().includes(searchValue.toLowerCase()),
         );
 
@@ -184,11 +182,11 @@ export default function List({
 
         tableHead = (
             <>
-                <th className={styles.th}>Name</th>
-                <th className={styles.th}>Price</th>
-                <th className={styles.th}>1H</th>
-                <th className={styles.th}>24H</th>
-                <th className={styles.th}>7D</th>
+                <th className={styles.th} onMouseOver={(e) => onMouseOverHeader(e.target as HTMLElement)} onMouseLeave={(e) => onMouseOutHeader(e.target as HTMLElement)} onClick={(e) => sortData(e.target as HTMLElement, "name")}>Name</th>
+                <th className={styles.th} onMouseOver={(e) => onMouseOverHeader(e.target as HTMLElement)} onMouseLeave={(e) => onMouseOutHeader(e.target as HTMLElement)} onClick={(e) => sortData(e.target as HTMLElement, "price_usd")}>Price</th>
+                <th className={styles.th} onMouseOver={(e) => onMouseOverHeader(e.target as HTMLElement)} onMouseLeave={(e) => onMouseOutHeader(e.target as HTMLElement)} onClick={(e) => sortData(e.target as HTMLElement, "price_usd")}>1H</th>
+                <th className={styles.th} onMouseOver={(e) => onMouseOverHeader(e.target as HTMLElement)} onMouseLeave={(e) => onMouseOutHeader(e.target as HTMLElement)} onClick={(e) => sortData(e.target as HTMLElement, "price_usd")}>24H</th>
+                <th className={styles.th} onMouseOver={(e) => onMouseOverHeader(e.target as HTMLElement)} onMouseLeave={(e) => onMouseOutHeader(e.target as HTMLElement)} onClick={(e) => sortData(e.target as HTMLElement, "price_usd")}>7D</th>
             </>
         );
     } else {
