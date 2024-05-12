@@ -45,6 +45,9 @@ a {
     color: #4a4f5f;
     max-height: 100%;
     padding: 23px 0;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 nav>ul {
@@ -79,8 +82,8 @@ li>a:hover {
 
 .card {
     background: #ffffff;
-    padding: 1em 2em;
     border-radius: 7px;
+    margin-bottom: 2em;
 }
 
 .columns {

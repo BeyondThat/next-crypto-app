@@ -15,49 +15,69 @@
 
 .table {
     border-collapse: collapse;
-    margin-bottom: 3em;
-}
-
-.tr {
-    border-bottom: 1px solid rgb(200, 200, 200);
+    margin-bottom: 1em;
 }
 
 .trBody:hover {
-    background-color: rgb(230, 230, 230);
-    cursor: pointer;
+    background-color: #f3f4ff;
 }
 
 .td {
-    padding: 0.7em 2em 0.5em 0em;
+    padding: 0.5em 2.5em 0.5em 2em;
+    margin-right: 1em;
+    cursor: pointer;
+}
+
+
+.td:not(:last-child) {
+    padding-right: 2em;
+}
+
+.tHead {
+    position: sticky;
+    z-index: 2;
+    top: 0px;
+    background-color: white;
+}
+
+.borderHead {
+    height: 1px;
+    background-color: rgb(230, 230, 230);
+    padding: 0;
 }
 
 .th {
-    padding: 0 2em 0.5em 0;
+    padding: 0.5em 2em 0.5em 2em;
     text-align: left;
-    border-collapse: collapse;
     cursor: pointer;
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    line-height: 20px;
 }
 
-.th:first-child {
-    padding-right: 5.5em;
-}
-
-.asc .desc {
-    position: relative;
+.th:hover {
+    color: #5267fe;
 }
 
 .asc::after {
     content: "▴";
+    color: #5267fe;
 }
 
 .desc::after {
     content: "▾";
+    color: #5267fe;
 }
 
 .descTransparent::after {
     content: "▾";
     opacity: 0.5;
+}
+
+.coinSymbol {
+    opacity: 0.5;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    display: block;
 }

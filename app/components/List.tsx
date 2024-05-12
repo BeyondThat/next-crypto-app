@@ -6,15 +6,14 @@ import styles from "../page.module.css";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 
-function color(priceChange: number): string {
+function color(priceChange: string) {
     if (priceChange === null) {
         return "undefined";
     } else {
-        priceChange = parseFloat(priceChange.toFixed(1));
-
-        if (priceChange > 0) {
+        const priceChangeNumber = parseFloat(priceChange);
+        if (priceChangeNumber > 0) {
             return "rgb(50,200,0)";
-        } else if (priceChange < 0) {
+        } else if (priceChangeNumber < 0) {
             return "red";
         } else {
             return "black";
@@ -29,6 +28,27 @@ function formatCurrency(value: number) {
     let b = value.toLocaleString("de-DE");
     //console.log(b);
     return b;
+}
+
+function percentChangeTD(value: string) {
+    if (value === undefined) {
+        return <td className={styles.td}
+            style={{ color: "black" }}>
+            -
+        </td>
+    }
+    else {
+        let valueNumber = Number.parseFloat(value).toFixed(1);
+        valueNumber = valueNumber === "-0.0" ? "0.0" : valueNumber;
+        return <td
+            className={styles.td}
+            style={{ color: color(valueNumber) }}
+        >
+            {value
+                ? `${valueNumber}%`
+                : "-"}
+        </td>
+    }
 }
 
 
@@ -58,8 +78,6 @@ export default function List({
             sortedExchangesData = sortedExchangesData.sort((a, b) => ((a[sortBy] as string).toLowerCase()).localeCompare((b[sortBy] as string).toLowerCase()));
         }
         else {
-
-            console.log(sortBy);
             sortedExchangesData = sortedExchangesData.sort((a, b) => (a[sortBy] as number) - (b[sortBy] as number));
         }
 
@@ -132,8 +150,8 @@ export default function List({
     let tableHead;
 
     if (dataType === "coins") {
-        const filteredCoinsData:Array<Coin> = data.filter(
-            (value:Coin) =>
+        const filteredCoinsData: Array<Coin> = data.filter(
+            (value: Coin) =>
                 value.name.toLowerCase().includes(searchValue.toLowerCase()),
         );
 
@@ -146,38 +164,18 @@ export default function List({
                     className={`${styles.tr} ${styles.trBody}`}
                     key={coin.id}
                 >
-                    <td className={styles.td}>{coin.name}</td>
+                    <td className={styles.td}><span>{coin.name}</span> <span className={styles.coinSymbol}>{coin.symbol}</span></td>
                     <td className={styles.td}>
                         {currency === "usd"
                             ? `$${parseFloat(coin.price_usd).toFixed(2)}`
                             : `€${(parseFloat(coin.price_usd) / (eurRate || 1.1)).toFixed(2)}`}
                     </td>
 
-                    <td
-                        className={styles.td}
-                        style={{ color: color(parseFloat(coin.percent_change_1h)) }}
-                    >
-                        {coin.percent_change_1h
-                            ? `${parseFloat(coin.percent_change_1h).toFixed(1)}%`
-                            : "-"}
-                    </td>
-                    <td
-                        className={styles.td}
-                        style={{ color: color(parseFloat(coin.percent_change_24h)) }}
-                    >
-                        {coin.percent_change_24h
-                            ? `${parseFloat(coin.percent_change_24h).toFixed(1)}%`
-                            : "-"}
-                    </td>
 
-                    <td
-                        className={styles.td}
-                        style={{ color: color(parseFloat(coin.percent_change_7d)) }}
-                    >
-                        {coin.percent_change_7d
-                            ? `${parseFloat(coin.percent_change_7d).toFixed(1)}%`
-                            : "-"}
-                    </td>
+                    {percentChangeTD(coin.percent_change_1h)}
+                    {percentChangeTD(coin.percent_change_24h)}
+                    {percentChangeTD(coin.percent_change_7d)}
+
                 </tr>
             );
         });
@@ -240,8 +238,11 @@ export default function List({
                 }}
             />
             <table className={styles.table}>
-                <thead>
+                <thead className={styles.tHead}>
                     <tr className={styles.tr}>{tableHead}</tr>
+                    <tr>
+                        <th colSpan={100} className={styles.borderHead}></th>
+                    </tr>
                 </thead>
                 <tbody>{list}</tbody>
             </table>
