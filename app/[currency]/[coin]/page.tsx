@@ -1,36 +1,32 @@
 "use client";
 import dynamic from "next/dynamic";
-import useFetchCoin from "../../hooks/useFetchCoin";
+import useFetchCoin from "../../../hooks/useFetchCoin";
 import {useParams} from "next/navigation";
 import {useEffect, useState} from "react";
-import {Currency} from "../../types";
+import {Currency} from "../../../types";
 
-const LineChart = dynamic(() => import("../components/LineChart"), {
+const LineChart = dynamic(() => import("../../components/LineChart"), {
     ssr: false,
 });
 
 export default function CoinPage() {
-    const {coin}: {coin: string} = useParams();
-    const [currency, setCurrency] = useState(
-        sessionStorage.getItem(("currency" || "usd")) as Currency,
-    );
+    const params = useParams();
+     const [currency, setCurrency] = useState(
+      () => params.currency || "usd"
+     );
 
-    const {data, status, refetch} = useFetchCoin(currency, coin, 7);
+    const {data, status, refetch} = useFetchCoin(currency as Currency, params.coin as string, 7);
+
     useEffect(() => {
         function updateCurrency() {
             const currency = sessionStorage.getItem("currency") as Currency;
             setCurrency(currency);
+
         }
         globalThis.addEventListener("storage", updateCurrency);
 
-//        return () => {
-  //          globalThis.removeEventListener("storage", updateCurrency);
-   //     };
     }, []);
 
-    console.log(currency);
-
-    //  const status = null;
     if (status === "pending") {
         return <p>Loading...</p>;
     }
@@ -39,10 +35,10 @@ export default function CoinPage() {
         return <p>Error!</p>;
     }
 
-    const formattedData = data["prices"].map((item: Array<[]>) => {
+    const formattedData = data["prices"].map((item: Array<number>) => {
         return {
             x: item[0], //date
-            y: item[1], //price
+            y: currency === "usd" ? item[1] : (item[1] / 1.1), //price
         };
     });
     return (
@@ -50,8 +46,8 @@ export default function CoinPage() {
             {
                 <LineChart
                     coinData={formattedData}
-                    coin={coin}
-                    currency={currency}
+                    coin={params.coin as string}
+                    currency={currency as Currency}
                 />
             }
         </div>

@@ -159,7 +159,7 @@ export default function List({
             return (
                 <tr
                     onClick={() =>
-                        router.push(`${coin.name.toLowerCase().replace(" ", "-")}`)
+                        router.push(`${currency}/${coin.name.toLowerCase().replace(" ", "-")}`)
                     }
                     className={`${styles.tr} ${styles.trBody}`}
                     key={coin.id}
@@ -202,7 +202,7 @@ export default function List({
             return (
                 <tr
                     onClick={() =>
-                        router.push(`${exchange.name.toLowerCase().replace(" ", "-")}`)
+                        router.push(`${currency}/${exchange.name.toLowerCase().replace(" ", "-")}`)
                     }
                     className={`${styles.tr} ${styles.trBody}`}
                     key={exchange.id}
